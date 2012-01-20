@@ -60,7 +60,7 @@ CometD and the Bayeux protocol.
             filterMappings[filterMappings.size() - 1] + {
                 'filter-mapping' {
                     'filter-name'('continuation')
-                    'servlet-name'('cometd')
+                    'url-pattern'('/cometd/*')
                 }
             }
         }
