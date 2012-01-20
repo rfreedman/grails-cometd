@@ -33,32 +33,34 @@ class CometTests extends FunctionalTestCase
         super.setUp()
         client = new BayeuxClient(makeRequestURL(null, '/cometd').toString(), LongPollingTransport.create(null))
     }
+    
+    void tearDown()
+    {
+        super.tearDown()
+        client.disconnect();
+        client.waitFor(1000, BayeuxClient.State.DISCONNECTED);
+    }
 
     void testHandshake()
     {
-        def connectedLatch = new CountDownLatch(1)
-        client.getChannel(Channel.META_HANDSHAKE).addListener({ channel, message ->
-            connectedLatch.countDown()
-        } as ClientSessionChannel.MessageListener)
         client.handshake()
-        assert connectedLatch.await(1, SECONDS) : 'handshake timeout'
+        assert client.waitFor(1000, BayeuxClient.State.CONNECTED) : 'handshake timeout'
     }
     
     // Simple echo service test to make sure that the bayeux bean was hooked up correctly to the CometdServlet.
     void testEcho()
     {
         def latch = new CountDownLatch(1)
+        client.handshake()
+        client.waitFor(1000, BayeuxClient.State.CONNECTED)
         def echoChannel = client.getChannel('/echo')
-        client.getChannel(Channel.META_HANDSHAKE).addListener({ channel, message ->
-            echoChannel.publish([msg: 'hello'])
-        } as ClientSessionChannel.MessageListener)
-        echoChannel.addListener({ channel, message ->
+        echoChannel.subscribe({ channel, message ->
             if (message.data?.echo) {
                 assert message.data.echo == 'hello'
                 latch.countDown()
             }
         } as ClientSessionChannel.MessageListener)
-        client.handshake()
-        assert latch.await(2, SECONDS) : 'timeout'
+        echoChannel.publish([echo: 'hello'])
+        assert latch.await(4, SECONDS) : 'timeout'
     }
 }

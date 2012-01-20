@@ -16,26 +16,17 @@
 
 package grails.plugins.cometd.test
 
-import org.cometd.bayeux.server.ServerChannel
-
 import org.springframework.beans.factory.InitializingBean
+import org.cometd.bayeux.client.ClientSessionChannel
 
 class EchoService implements InitializingBean
 {
     def bayeux
-    
+
     void afterPropertiesSet()
     {
         assert bayeux : 'bayeux object must be set'
         def localSession = bayeux.newLocalSession('echo')
         localSession.handshake()
-        def serverSession = localSession.getServerSession()
-        def channel = bayeux.getChannel('/echo', true)
-        channel.addListener({ from, chan, msg ->
-            if (from != localSession.getServerSession()) {
-                from.deliver serverSession, chan.id, [echo: msg.data.msg], null
-            }
-            true
-        } as ServerChannel.MessageListener)
     }
 }
