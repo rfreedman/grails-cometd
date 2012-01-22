@@ -54,12 +54,20 @@ CometD and the Bayeux protocol.
                     'filter-name'('continuation')
                     'filter-class'('org.eclipse.jetty.continuation.ContinuationFilter')
                 }
+                filter {
+                    'filter-name'('cross-origin')
+                    'filter-class'('rg.eclipse.jetty.servlets.CrossOriginFilter')
+                }
             }
             
             def filterMappings = xml.'filter-mapping'
             filterMappings[filterMappings.size() - 1] + {
                 'filter-mapping' {
                     'filter-name'('continuation')
+                    'url-pattern'('/cometd/*')
+                }
+                'filter-mapping' {
+                    'filter-name'('cross-origin')
                     'url-pattern'('/cometd/*')
                 }
             }
