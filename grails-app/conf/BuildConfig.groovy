@@ -29,6 +29,7 @@ grails.project.dependency.resolution = {
             excludes 'servlet-api'
         }
         compile group: 'org.cometd.java', name: 'bayeux-api', version: cometdVer
+        runtime group: 'org.eclipse.jetty', name: 'jetty-servlets', version: '7.4.4.v20110707'
         test group: 'org.cometd.java', name: 'cometd-java-client', version: cometdVer
     }
 }

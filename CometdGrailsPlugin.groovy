@@ -32,7 +32,9 @@ class CometdGrailsPlugin {
         'grails-app/services/**/test/',
         'grails-app/views/error.gsp',
         'scripts',
-        'web-app/'
+        'web-app/css/**',
+        'web-app/images/**',
+        'web-app/META-INF'
     ]
 
     def author = 'Marcus Better'
@@ -54,10 +56,10 @@ CometD and the Bayeux protocol.
                     'filter-name'('continuation')
                     'filter-class'('org.eclipse.jetty.continuation.ContinuationFilter')
                 }
-                filter {
+                /*filter {
                     'filter-name'('cross-origin')
                     'filter-class'('rg.eclipse.jetty.servlets.CrossOriginFilter')
-                }
+                }*/
             }
             
             def filterMappings = xml.'filter-mapping'
@@ -66,10 +68,10 @@ CometD and the Bayeux protocol.
                     'filter-name'('continuation')
                     'url-pattern'('/cometd/*')
                 }
-                'filter-mapping' {
+                /*'filter-mapping' {
                     'filter-name'('cross-origin')
                     'url-pattern'('/cometd/*')
-                }
+                }*/
             }
         }
         
