@@ -22,6 +22,9 @@ grails.project.dependency.resolution = {
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     repositories {        
         mavenCentral()
+        grailsPlugins() 
+        grailsHome() 
+        grailsCentral() 
     }
     dependencies {
         def cometdVer = '2.3.1'
